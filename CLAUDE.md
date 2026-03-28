@@ -22,8 +22,14 @@ The app requires a proper `.app` bundle (produced by `build.sh`) for `UNUserNoti
 
 ```bash
 # Build a versioned DMG for distribution
-bash package.sh 1.0.0        # produces GrantBar-1.0.0.dmg
+bash package.sh              # version read from VERSION file
 ```
+
+## Icon
+
+`make_icon.swift` generates `AppIcon.iconset/` (all 10 required PNG sizes) from the `newspaper.fill` SF Symbol — white glyph on a black rounded-rect background. `build.sh` compiles and runs it via `swiftc -framework AppKit`, then calls `iconutil` to produce `AppIcon.icns`, which gets copied into the bundle's `Contents/Resources/`. The `.icns` and iconset directory are build artifacts and not committed to git.
+
+The `pointSize` in the symbol configuration is set to `~75% of the drawn rect width` so AppKit rasterises the glyph natively at each size rather than stretching a small default render. To change the icon appearance, edit `make_icon.swift` and re-run `bash build.sh`.
 
 ## Architecture
 
