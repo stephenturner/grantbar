@@ -4,6 +4,9 @@
 *.d
 .DS_Store
 *.dmg
+*.icns
+.make_icon
+AppIcon.iconset/
 dist-staging/
 xcuserdata/
 *.xcworkspace/xcuserdata/

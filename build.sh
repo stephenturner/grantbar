@@ -12,18 +12,28 @@ swift build -c release
 BINARY=".build/release/$APP_NAME"
 APP_BUNDLE="$APP_NAME.app"
 
+echo "==> Generating icon..."
+swiftc -framework AppKit make_icon.swift -o .make_icon
+./.make_icon
+rm .make_icon
+iconutil -c icns AppIcon.iconset -o AppIcon.icns
+rm -rf AppIcon.iconset
+
 echo "==> Assembling app bundle..."
 rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
 
 cp "$BINARY" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
+cp AppIcon.icns "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 
 cat > "$APP_BUNDLE/Contents/Info.plist" << PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleExecutable</key>
     <string>${APP_NAME}</string>
     <key>CFBundleIdentifier</key>
