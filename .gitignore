@@ -1,0 +1,9 @@
+.build/
+*.app/
+*.o
+*.d
+.DS_Store
+*.dmg
+dist-staging/
+xcuserdata/
+*.xcworkspace/xcuserdata/

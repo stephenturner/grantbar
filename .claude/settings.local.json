@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(swift:*)",
+      "Bash(swift package:*)",
+      "Bash(bash build.sh 2>&1)"
+    ]
+  }
+}
