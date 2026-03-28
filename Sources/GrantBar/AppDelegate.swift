@@ -108,11 +108,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, @preconcurrency UNUserNotifi
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        // If the notification carries a specific item URL, open it directly
-        if let urlString = response.notification.request.content.userInfo["url"] as? String,
-           let url = URL(string: urlString)
-        {
-            NSWorkspace.shared.open(url)
+        // If the notification carries a specific item URL, open it directly.
+        // openFeedURL() validates the scheme is http/https before opening.
+        if let urlString = response.notification.request.content.userInfo["url"] as? String {
+            openFeedURL(urlString)
         } else {
             DispatchQueue.main.async { self.togglePopover() }
         }

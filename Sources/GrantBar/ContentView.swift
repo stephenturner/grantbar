@@ -107,6 +107,17 @@ struct ContentView: View {
     }
 }
 
+// MARK: - Safe URL opening
+
+/// Only opens URLs with http or https schemes. Rejects file://, applescript://, etc.
+func openFeedURL(_ urlString: String) {
+    guard let url = URL(string: urlString),
+          let scheme = url.scheme?.lowercased(),
+          scheme == "https" || scheme == "http"
+    else { return }
+    NSWorkspace.shared.open(url)
+}
+
 // MARK: - Item Row
 
 struct ItemRow: View {
@@ -115,9 +126,7 @@ struct ItemRow: View {
 
     var body: some View {
         Button {
-            if let url = URL(string: item.link) {
-                NSWorkspace.shared.open(url)
-            }
+            openFeedURL(item.link)
         } label: {
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.title)
