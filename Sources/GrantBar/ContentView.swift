@@ -55,14 +55,19 @@ struct ContentView: View {
         .padding(.vertical, 8)
     }
 
+    private var visibleItems: [FeedItem] {
+        let enabledFeedIds = Set(feedManager.feeds.filter(\.isEnabled).map(\.id))
+        return Array(feedManager.items.filter { enabledFeedIds.contains($0.feedId) }.prefix(60))
+    }
+
     private var itemList: some View {
         Group {
-            if feedManager.items.isEmpty {
+            if visibleItems.isEmpty {
                 emptyState
             } else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(feedManager.items.prefix(60)) { item in
+                        ForEach(visibleItems) { item in
                             ItemRow(item: item)
                             Divider()
                                 .padding(.leading, 12)
