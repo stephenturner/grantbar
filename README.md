@@ -39,7 +39,6 @@ Requires macOS 13+ and the Xcode command line tools (`xcode-select --install`).
 git clone https://github.com/stephenturner/grantbar.git
 cd grantbar
 bash build.sh
-open GrantBar.app
 ```
 
 To install to Applications:
@@ -51,7 +50,7 @@ cp -r GrantBar.app /Applications/
 To build a distributable DMG:
 
 ```bash
-bash package.sh 1.0.0
+bash package.sh
 ```
 
 ## License
