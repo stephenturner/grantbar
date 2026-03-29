@@ -29,6 +29,7 @@ final class RSSParser: NSObject, XMLParserDelegate, @unchecked Sendable {
         feedTitleSet = false
 
         let parser = XMLParser(data: data)
+        parser.shouldResolveExternalEntities = false
         parser.delegate = self
         parser.parse()
         return result

@@ -55,14 +55,19 @@ struct ContentView: View {
         .padding(.vertical, 8)
     }
 
+    private var visibleItems: [FeedItem] {
+        let enabledFeedIds = Set(feedManager.feeds.filter(\.isEnabled).map(\.id))
+        return Array(feedManager.items.filter { enabledFeedIds.contains($0.feedId) }.prefix(60))
+    }
+
     private var itemList: some View {
         Group {
-            if feedManager.items.isEmpty {
+            if visibleItems.isEmpty {
                 emptyState
             } else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(feedManager.items.prefix(60)) { item in
+                        ForEach(visibleItems) { item in
                             ItemRow(item: item)
                             Divider()
                                 .padding(.leading, 12)
@@ -107,6 +112,17 @@ struct ContentView: View {
     }
 }
 
+// MARK: - Safe URL opening
+
+/// Only opens URLs with http or https schemes. Rejects file://, applescript://, etc.
+func openFeedURL(_ urlString: String) {
+    guard let url = URL(string: urlString),
+          let scheme = url.scheme?.lowercased(),
+          scheme == "https" || scheme == "http"
+    else { return }
+    NSWorkspace.shared.open(url)
+}
+
 // MARK: - Item Row
 
 struct ItemRow: View {
@@ -115,9 +131,7 @@ struct ItemRow: View {
 
     var body: some View {
         Button {
-            if let url = URL(string: item.link) {
-                NSWorkspace.shared.open(url)
-            }
+            openFeedURL(item.link)
         } label: {
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.title)
